@@ -6,7 +6,7 @@
 #include "Perlin.h"
 #include "map.h"
 
-const int xsize = 500, ysize = 500;
+const int xsize = 200, ysize = 200;
 
 float map1[ysize][xsize];
 perlinNoise noise;
@@ -18,7 +18,7 @@ void generateNoise();
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(500, 500), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
     sf::Image pxlImage;
     //pxlImage.create(xsize, ysize, sf::Color(0, 3, 0));
     sf::Sprite pxlSprite;
@@ -81,7 +81,7 @@ void generateNoise()
 {
     noise.generate();
     int contourLineSpacing = 10;
-    float waterLevel = 0.5;
+    float waterLevel = 0.0;
     auto contourAndWater = std::function<float (float)>
                            ([contourLineSpacing, waterLevel](float x)
     {
@@ -92,7 +92,8 @@ void generateNoise()
     {
         return (0.5+sin(x*2*3.14159*8+v*5*3.14159)/2.0);
     });
-    noise.calcBrownianFractal(&map1[0][0], xsize, ysize, 8, (int)pow(2,7), 2, 2, contourAndWater);
+
+    noise.calcBrownianFractal(&map1[0][0], xsize, ysize, 1, (int)pow(2,5), 5, 8, contourAndWater);
 
     for (int i=0; i<ysize; i++)
     {

@@ -129,18 +129,20 @@ void perlinNoise::calcBrownianFractal(float* arr, int xsize, int ysize,
 	int startOctave, int endOctave, double amplitude, double frequency,
 	std::function<float (float)> modifier)
 {
+    int largerDim = (xsize>ysize ? xsize : ysize);
 	int counter = 1;
-	for (double k=startOctave; k<=endOctave; k*=frequency)
+	for (double k=startOctave; k<=endOctave; k*=frequency, counter++)
 	{
 		float invAmp = (float)1.0/(pow(amplitude,counter));
 		for (int i=0; i<ysize; i++)
 		{
 			for (int j=0; j<xsize; j++)
 			{
-				arr[xsize*i+j] += invAmp*(float)this->getPt(((double)j/xsize)*(double)(k), ((double)i/ysize)*(double)(k));
+				arr[xsize*i+j] += invAmp*(float)this->getPt(
+                    ((double)j/largerDim)*(double)(k),
+                    ((double)i/largerDim)*(double)(k));
 			}
 		}
-		counter++;
 	}
 
 	float highest = 0.0, lowest = 0.0;
@@ -154,7 +156,8 @@ void perlinNoise::calcBrownianFractal(float* arr, int xsize, int ysize,
 		}
 	}
 
-	float conversionFactor = (float)1.0/(fabs(highest) + fabs(lowest));	// to convert perlin noise to rgb format
+    // to convert perlin noise to rgb format
+	float conversionFactor = (float)1.0/(fabs(highest) + fabs(lowest));
 
 	for (int i=0; i<ysize; i++)
 	{
