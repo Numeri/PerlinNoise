@@ -5,7 +5,7 @@
 #include <math.h>
 #include "Perlin.h"
 #include "map.h"
-
+ 
 const int xsize = 500, ysize = 500;
 
 float map1[ysize][xsize];
