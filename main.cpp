@@ -93,15 +93,15 @@ void generateNoise()
         return (0.5+sin(x*2*3.14159*8+v*5*3.14159)/2.0);
     });
 
-    noise.calcBrownianFractal(&map1[0][0], xsize, ysize, 1, (int)pow(2,5), 5, 8, contourAndWater);
+    noise.calcBrownianFractal(&map1[0][0], xsize, ysize, 1, (int)pow(2,5), 2, 8);
 
     for (int i=0; i<ysize; i++)
     {
         for (int j=0; j<xsize; j++)
         {
             int loc = (i*xsize+j)*4;
-            pixels[loc] = 0;
-            pixels[loc+1] = (int)(map1[i][j]*0);
+            pixels[loc] = (int)(map1[i][j]*255);
+            pixels[loc+1] = (int)(map1[i][j]*255);
             pixels[loc+2] = (int)(map1[i][j]*255);
             pixels[loc+3] = 255;
         }
