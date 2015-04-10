@@ -1,6 +1,5 @@
 #include "Perlin.h"
 
-
 double interp(double value)
 {
 	return 6.0*pow(value, 5.0) - 15.0*pow(value, 4.0) + 10.0*pow(value, 3.0);
@@ -86,23 +85,23 @@ double perlinNoise::getPt(double x, double y)
 }
 
 void perlinNoise::calcBrownianFractal(float* arr, int xsize, int ysize,
-	int startOctave, int endOctave, double amplitude, double frequency)
+	int startOctave, int endOctave, double amplitude, double frequency, Rectangle bounds)
 {
     std::function<float (float, float, float)> IDModifier = [](float val, float x, float y){return val;};
-    calcBrownianFractal(arr, xsize, ysize, startOctave, endOctave, amplitude, frequency, IDModifier);
+    calcBrownianFractal(arr, xsize, ysize, startOctave, endOctave, amplitude, frequency, IDModifier, bounds);
 }
 
 void perlinNoise::calcBrownianFractal(float* arr, int xsize, int ysize,
 	int startOctave, int endOctave, double amplitude, double frequency,
-	std::function<float (float)> modifier)
+	std::function<float (float)> modifier, Rectangle bounds)
 {
     std::function<float (float, float, float)> moddedModifier = [modifier](float val, float x, float y){return modifier(val);};
-    calcBrownianFractal(arr, xsize, ysize, startOctave, endOctave, amplitude, frequency, moddedModifier);
+    calcBrownianFractal(arr, xsize, ysize, startOctave, endOctave, amplitude, frequency, moddedModifier, bounds);
 }
 
 void perlinNoise::calcBrownianFractal(float* arr, int xsize, int ysize,
 	int startOctave, int endOctave, double amplitude, double frequency,
-	std::function<float (float, float, float)> modifier)
+	std::function<float (float, float, float)> modifier, Rectangle bounds)
 {
 	int counter = 1;
 	for (double k=startOctave; k<=endOctave; k*=frequency)
@@ -112,7 +111,7 @@ void perlinNoise::calcBrownianFractal(float* arr, int xsize, int ysize,
 		{
 			for (int j=0; j<xsize; j++)
 			{
-				arr[xsize*i+j] += invAmp*(float)this->getPt(((double)j/xsize)*(double)(k), ((double)i/ysize)*(double)(k));
+				arr[xsize*i+j] += invAmp*(float)this->getPt((bounds.x1 + (bounds.x2-bounds.x1)*(double)j/xsize)*(double)(k), (bounds.y1 + (bounds.y2-bounds.y1)*((double)i/ysize))*(double)(k));
 			}
 		}
 		counter++;

@@ -7,6 +7,11 @@
 #include "gradient.h"
 #include <functional>
 
+struct Rectangle {
+float x1, y1, x2, y2;
+Rectangle () : x1(0.0), y1(0.0), x2(1.0), y2(1.0) {}
+};
+
 double interp(double value);
 
 class perlinNoise{
@@ -29,23 +34,23 @@ public:
 	 *and the frequency.
 	 */
 	void calcBrownianFractal(float* arr, int xsize, int ysize, int startOctave,
-		int endOctave, double amplitude, double frequency);
+		int endOctave, double amplitude, double frequency, Rectangle bounds = Rectangle());
 
 	/*calcBrownianFractal: Calculates the Brownian Fractal of the noise.
 	 *With std::function<float (float)> modifier, which takes the
 	 *point's value.
 	 */
 	void calcBrownianFractal(float* arr, int xsize, int ysize, int startOctave,
-		int endOctave, double amplitude, double frequency, 
-		std::function<float (float)> modifier);
+		int endOctave, double amplitude, double frequency,
+		std::function<float (float)> modifier, Rectangle bounds = Rectangle());
 
 	/*calcBrownianFractal: Calculates the Brownian Fractal of the noise.
 	 *With std::function<float (float, float, float)> modifier, which takes
 	 *the point's value, x position [0,1], y position [0,1] in that order.
 	 */
-	void calcBrownianFractal(float* arr, int xsize, int ysize, int startOctave,
-		int endOctave, double amplitude, double frequency, 
-		std::function<float (float, float, float)> modifier);
+    void calcBrownianFractal(float* arr, int xsize, int ysize,
+        int startOctave, int endOctave, double amplitude, double frequency,
+        std::function<float (float, float, float)> modifier, Rectangle bounds = Rectangle());
 };
 
 #endif
